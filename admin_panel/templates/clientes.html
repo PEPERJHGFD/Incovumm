@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h1>Clientes</h1>
+      {% if cliente %}
+        <p class="text-muted">Editando cliente <strong>{{ cliente.Nombre }}</strong>.</p>
+      {% else %}
+        <p class="text-muted">Administra usuarios con edición, eliminación e inactivación.</p>
+      {% endif %}
+    </div>
+    <span class="badge bg-{{ 'success' if connected else 'warning' }} fs-6">
+      {{ 'Firebase conectado' if connected else 'Modo local / sin conexión' }}
+    </span>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ 'Editar cliente' if cliente else 'Nuevo cliente' }}</h5>
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" value="{{ cliente.Nombre if cliente else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Correo</label>
+            <input type="email" name="correo" class="form-control" value="{{ cliente.Correo if cliente else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="telefono" class="form-control" value="{{ cliente.Telefono if cliente else '' }}" required>
+          </div>
+          <button type="submit" class="btn btn-primary">{{ 'Guardar cambios' if cliente else 'Agregar cliente' }}</button>
+          {% if cliente %}
+            <a href="{{ url_for('clientes') }}" class="btn btn-secondary ms-2">Cancelar</a>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Lista de clientes</h5>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in clientes %}
+                <tr>
+                  <td>{{ c.ID }}</td>
+                  <td>{{ c.Nombre }}</td>
+                  <td>{{ c.Correo }}</td>
+                  <td>{{ c.Telefono }}</td>
+                  <td>
+                    {% if c.Activo %}
+                      <span class="badge bg-success">Activo</span>
+                    {% else %}
+                      <span class="badge bg-secondary">Inactivo</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a href="{{ url_for('editar_cliente', cliente_id=c.ID) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                    <a href="{{ url_for('inactivar_cliente', cliente_id=c.ID) }}" class="btn btn-sm btn-outline-warning">Inactivar</a>
+                    <a href="{{ url_for('eliminar_cliente', cliente_id=c.ID) }}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              {% if clientes|length == 0 %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted">No hay clientes registrados.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

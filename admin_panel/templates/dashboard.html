@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="text-muted">Resumen rápido del panel administrativo.</p>
+    </div>
+    <span class="badge bg-{{ 'success' if connected else 'warning' }} fs-6">
+      {{ 'Firebase conectado' if connected else 'Modo local / sin conexión' }}
+    </span>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <div class="card text-bg-primary h-100">
+      <div class="card-body">
+        <h5 class="card-title">Clientes totales</h5>
+        <p class="display-6">{{ total }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card text-bg-success h-100">
+      <div class="card-body">
+        <h5 class="card-title">Activos</h5>
+        <p class="display-6">{{ activos }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card text-bg-secondary h-100">
+      <div class="card-body">
+        <h5 class="card-title">Inactivos</h5>
+        <p class="display-6">{{ inactivos }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
